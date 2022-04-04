@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: google/github_actions_playground@38f275be4c69d9c9269521d359217db6111bc477
+      - uses: google/github_actions_playground@478f2a371d7bfed5fbc2ce056f28cbe21fa7712d
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo | ls -a
