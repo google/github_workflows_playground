@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: google/github_actions_playground@edc69b28562f0e930eea7138b3129ad0096cb206
+      - uses: google/github_actions_playground@8c2db7dae6ede394d0dd36b4ece1a5e0bb270d21
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo | ls -a
