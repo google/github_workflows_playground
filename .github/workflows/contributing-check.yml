@@ -1,0 +1,27 @@
+name: 'Check for CONTRIBUTING file'
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  check-for-CONTRIBUTING:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout repository'
+        uses: 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' # ratchet:actions/checkout@v4
+
+      - name: 'Verify CONTRIBUTING exists'
+        run: |
+          if [ -f CONTRIBUTING.md ] || [ -f CONTRIBUTING.rst ] || [ -f CONTRIBUTING ] || [ -f contributing.md ] || [ -f contributing.rst ] || [ -f contributing ]; then
+            echo "A CONTRIBUTING file was found."
+            exit 0
+          else
+            echo "Error: No CONTRIBUTING file found. Please add a CONTRIBUTING.md or CONTRIBUTING.rst file."
+            exit 1
+          fi
