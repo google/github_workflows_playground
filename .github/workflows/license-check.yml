@@ -1,0 +1,56 @@
+name: Check License
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  find_license_file:
+    runs-on: ubuntu-latest
+    outputs:
+      filename: ${{ steps.find_license.outputs.filename }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Find license file
+        id: find_license
+        run: |
+          if [[ -f "LICENSE" ]]; then
+            echo "filename=LICENSE" >> $GITHUB_OUTPUT
+          elif [[ -f "LICENSE.md" ]]; then
+            echo "filename=LICENSE.md" >> $GITHUB_OUTPUT
+          elif [[ -f "LICENSE.txt" ]]; then
+            echo "filename=LICENSE.txt" >> $GITHUB_OUTPUT
+          elif [[ -f "COPYING" ]]; then
+            echo "filename=COPYING" >> $GITHUB_OUTPUT
+          else
+            echo "::error::No license file found. Checked for LICENSE, LICENSE.md, LICENSE.txt, COPYING."
+            exit 1
+          fi
+
+  classify_license:
+    needs: find_license_file
+    uses: billnapier/licenseclassifier/.github/workflows/classify.yml@93323eec88c7e44543bab2583c8347df9cb7314e
+    with:
+      file_to_classify: ${{ needs.find_license_file.outputs.filename }}
+
+  verify_license:
+    runs-on: ubuntu-latest
+    needs: classify_license
+    steps:
+      - name: Verify license
+        run: |
+          license_name="${{ needs.classify_license.outputs.license_name }}"
+          echo "Detected license: $license_name"
+          if [[ "$license_name" == "Apache-2.0" || "$license_name" == "BSD-3-Clause" || "$license_name" == "MIT" ]]; then
+            echo "License is compliant."
+          else
+            echo "::error::License '$license_name' is not one of the allowed licenses (Apache-2.0, BSD-3-Clause, MIT)."
+            exit 1
+          fi
