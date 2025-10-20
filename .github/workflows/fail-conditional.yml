@@ -1,0 +1,27 @@
+name: 'conditional-fail'
+
+on:
+  pull_request:
+    branches: [ 'dont_run_me' ]
+
+jobs:
+  fail_on_commit_message:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: 'Checkout code'
+      uses: 'actions/checkout@v4'
+
+    - name: 'Check for "fail" in commit message'
+      id: 'check_commit'
+      run: |
+        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        if echo "$COMMIT_MESSAGE" | grep -qi "fail"; then
+          echo "found_fail=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: 'Fail Step'
+      if: steps.check_commit.outputs.found_fail == 'true'
+      run: |
+        echo 'Failing because "fail" was found in the commit message.'
+        exit 1
+
