@@ -2,7 +2,7 @@ name: 'conditional-fail'
 
 on:
   pull_request:
-    branches: [ 'dont_run_me' ]
+    branches: [ 'main' ]
 
 jobs:
   fail_on_commit_message:
