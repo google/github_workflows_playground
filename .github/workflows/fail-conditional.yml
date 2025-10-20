@@ -2,10 +2,10 @@ name: 'conditional-fail'
 
 on:
   pull_request:
-    branches: [ 'main' ]
+    branches: [ 'foobar' ]
   push:
     branches:
-    - 'main'
+    - 'foobar'
   workflow_dispatch:
 
 jobs:
