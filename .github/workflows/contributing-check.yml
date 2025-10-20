@@ -25,3 +25,4 @@ jobs:
             echo "Error: No CONTRIBUTING file found. Please add a CONTRIBUTING.md or CONTRIBUTING.rst file."
             exit 1
           fi
+
