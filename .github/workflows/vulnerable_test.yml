@@ -1,0 +1,23 @@
+name: 'Vulnerable Workflow'
+
+on:
+  pull_request_target:
+    types: ['opened', 'synchronize']
+
+jobs:
+  vulnerable-job:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout PR code (Unsafe)'
+        uses: 'actions/checkout@v3'
+        with:
+          ref: '${{ github.event.pull_request.head.sha }}'
+      
+      - name: 'Run script'
+        run: |
+          echo "Running code from the PR..."
+          # In a real attack, this could be a script modified by the attacker
+          if [ -f ./script.sh ]; then
+            chmod +x ./script.sh
+            ./script.sh
+          fi
